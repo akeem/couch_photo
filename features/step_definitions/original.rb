@@ -23,6 +23,7 @@ Given /^an image with an original:$/ do |string|
 end
 
 Then /^I should be able to access metadata about the image via the `original` method:$/ do |string|
+  # puts string.encoding.name
   eval string
 end
 

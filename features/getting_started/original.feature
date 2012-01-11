@@ -120,7 +120,7 @@ Feature: The "Original" Image
         @image.original.url.should       == "#{Image.database.host}/couch_photo_test/#{@image.id}/variations/original.jpg"
         @image.original.extension.should == "jpg"
         @image.original.mime_type.should == "image/jpeg"
-        @image.original.data.should      == File.read("features/fixtures/avatar.jpg")
+        @image.original.data.should      == File.read("features/fixtures/avatar.jpg").encode("UTF-8")
         @image.original.width.should     == 128
         @image.original.height.should    == 128
         @image.original.custom_variation?.should be(false)
@@ -138,7 +138,7 @@ Feature: The "Original" Image
         @image.original.url.should       == "#{Image.database.host}/couch_photo_test/#{@image.id}/variations/original.jpg"
         @image.original.extension.should == "jpg"
         @image.original.mime_type.should == "image/jpeg"
-        @image.original.data.should      == File.read("features/fixtures/avatar.jpg")
+        @image.original.data.should      == File.read("features/fixtures/avatar.jpg", {:encoding => "ASCII-8BIT"})
         @image.original.width.should     == 128
         @image.original.height.should    == 128
         @image.original.custom_variation?.should be(false)
@@ -174,7 +174,7 @@ Feature: The "Original" Image
 
     And the auto-generated variations should be updated:
       """
-        @image.variations[:small].data.should_not != @small_variation_data
+        @image.variations[:small].data.force_encoding("ASCII-8BIT").should_not == @small_variation_data.force_encoding("ASCII-8BIT")
       """
 
     When I load the image from the database:
@@ -184,5 +184,5 @@ Feature: The "Original" Image
 
     Then the original image should be the new image:
       """
-        @image.original.data.should == File.read("features/fixtures/xmp.jpg")
+        @image.original.data.should == File.read("features/fixtures/xmp.jpg",{:encoding => "ASCII-8BIT"})
       """
